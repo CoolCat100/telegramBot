@@ -3,4 +3,5 @@ services:
   telegramBot:
     image: coolcatx/telegrambot
     restart: always
-  
+    environment:
+      BOT_NAME: salaryNetBot
