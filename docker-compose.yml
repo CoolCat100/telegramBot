@@ -5,3 +5,4 @@ services:
     restart: always
     environment:
       BOT_NAME: salaryNetBot
+      BOT_KEY: ${BOT_KEY}
