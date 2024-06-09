@@ -3,5 +3,4 @@ services:
     image: coolcatx/telegrambot
     restart: always
     environment:
-      assistant: salaryNetBot
       BOT_KEY: ${BOT_KEY}

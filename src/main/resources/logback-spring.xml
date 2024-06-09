@@ -13,7 +13,7 @@
                     <pattern>
                         <pattern>
                             {
-                            "app": "orchestrator"
+                            "app": "TaxTelegramBot"
                             }
                         </pattern>
                     </pattern>

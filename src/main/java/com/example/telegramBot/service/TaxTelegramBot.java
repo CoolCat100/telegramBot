@@ -16,6 +16,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
     private TaxService taxService;
     @Autowired
     private BotConfig botConfig;
+    private static final Logger logger = LoggerFactory.getLogger(TaxTelegramBot.class);
 
     @Override
     public String getBotUsername() {
@@ -57,7 +58,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
             }
         }
         if (!numberFound) {
-            message.setText("Пожалуйста, укажите сумму зарплаты в числовом формате после упоминания бота.");
+            message.setText("Пожалуйста, укажите сумму зарплаты в числовом формате (число положительное) после упоминания бота.");
             sendResponse(update, message);
         }
     }
@@ -90,25 +91,20 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            Logger logger = LoggerFactory.getLogger(TaxTelegramBot.class);
             logger.error("Error sending message", e);
         }
     }
 
     private double parseSalary(String input) {
-        if (input.toLowerCase().endsWith("к")) {
-            input = input.substring(0, input.length() - 1); // Удаляем последний символ 'к'
-            try {
-                return Double.parseDouble(input) * 1000; // Умножаем на 1000
-            } catch (NumberFormatException e) {
-                return -1; // Возвращаем -1, если ввод не является числом
+        if (input.matches("\\d+(\\.\\d+)?к?")) {
+            if (input.toLowerCase().endsWith("к")) {
+                input = input.substring(0, input.length() - 1);
+                return Double.parseDouble(input) * 1000;
+            } else {
+                return Double.parseDouble(input);
             }
         } else {
-            try {
-                return Double.parseDouble(input);
-            } catch (NumberFormatException e) {
-                return -1;
-            }
+            return -1;
         }
     }
 }
