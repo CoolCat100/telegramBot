@@ -1,0 +1,7 @@
+name: telegramBot
+
+on:
+  push:
+    branches:
+      - master
+      - main
