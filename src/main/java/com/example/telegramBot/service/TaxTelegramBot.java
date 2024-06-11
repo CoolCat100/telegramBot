@@ -58,7 +58,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
             }
         }
         if (!numberFound) {
-            message.setText("Пожалуйста, укажите сумму зарплаты в числовом формате (число положительное) после упоминания бота.");
+            message.setText("Пожалуйста, укажите сумму зарплаты в числовом формате (число должно быть положительное) после упоминания бота.");
             sendResponse(update, message);
         }
     }
@@ -71,7 +71,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             message.setChatId(String.valueOf(update.getMessage().getChatId()));
             message.enableMarkdown(true);
-            message.setText("Пожалуйста, отправьте зарплату в числовом формате");
+            message.setText("Пожалуйста, отправьте зарплату (зарплата должна быть положительной) в числовом формате");
             sendResponse(update, message);
         }
     }
