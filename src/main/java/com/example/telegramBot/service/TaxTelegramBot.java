@@ -71,7 +71,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             message.setChatId(String.valueOf(update.getMessage().getChatId()));
             message.enableMarkdown(true);
-            message.setText("Пожалуйста, отправьте зарплату (зарплата должна быть положительна) в числовом формате");
+            message.setText("Пожалуйста, отправьте зарплату (зарплата должна быть положительной) в числовом формате");
             sendResponse(update, message);
         }
     }
