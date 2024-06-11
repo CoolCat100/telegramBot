@@ -52,8 +52,9 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            export BOT_KEY=${{ secrets.TELEGRAM_BOT_KEY }}
             cd /home/denis
             sudo docker-compose down
             sudo docker-compose pull
-            sudo docker-compose up -d
+            echo "BOT_KEY=${{ secrets.TELEGRAM_BOT_KEY }}" > .env
+            sudo -E docker-compose --env-file .env up -d
+            rm -f .env
