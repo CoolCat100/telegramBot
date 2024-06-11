@@ -25,3 +25,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: coolcatx/telegrambot:latest
+          build-args: |
+            TELEGRAM_BOT_KEY=${{ secrets.TELEGRAM_BOT_KEY }}
