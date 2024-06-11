@@ -58,7 +58,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
             }
         }
         if (!numberFound) {
-            message.setText("Пожалуйста, укажите сумму зарплаты в числовом формате (число должно быть положительное) после упоминания бота.");
+            message.setText("Пожалуйста, укажите сумму зарплаты в числовом формате (число должно быть положительным) после упоминания бота.");
             sendResponse(update, message);
         }
     }
