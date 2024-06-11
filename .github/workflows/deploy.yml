@@ -52,6 +52,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            export BOT_KEY=${{ secrets.TELEGRAM_BOT_KEY }}
             cd /home/denis
             sudo docker-compose down
             sudo docker-compose pull
