@@ -33,7 +33,7 @@ jobs:
           push: true
           tags: coolcatx/telegrambot:latest
           build-args: |
-            TELEGRAM_BOT_KEY=${{ secrets.TELEGRAM_BOT_KEY }}
+            BOT_KEY=${{ secrets.TELEGRAM_BOT_KEY }}
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
         with:
