@@ -81,7 +81,7 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(update.getMessage().getChatId()));
         message.enableMarkdown(true);
 
-        double tax = taxService.countOldTax(salary);
+        double tax = taxService.countTax(salary);
         double finalSalary = salary - tax;
         message.setText("*Размер зарплаты net:* " + finalSalary);
         sendResponse(update, message);

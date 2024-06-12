@@ -22,15 +22,11 @@ public class TaxService {
         TAX_STEPS_NEW.put(2400000, 0.15);
         TAX_STEPS_NEW.put(0, 0.13);
     }
-    public double countOldTax(double salary) {
-        double yearSalary = salary * MONTHS;
-        return countTax(yearSalary, TAX_STEPS_OLD);
-    }
 
-//    public double countNewTax(double salary) {
-//        double yearSalary = salary * MONTHS;
-//        return countTax(yearSalary, TAX_STEPS_NEW);
-//    }
+    public double countTax(double salary) {
+        double yearSalary = salary * MONTHS;
+        return countTax(yearSalary, TAX_STEPS_NEW);
+    }
     private double countTax(double salary, Map<Integer, Double> TAX_STEPS) {
         if (salary <= 0) {
             throw new IllegalArgumentException("Зарплата должна быть больше нуля");

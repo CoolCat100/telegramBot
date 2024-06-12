@@ -1,14 +1,23 @@
-# Используйте официальный образ базового слоя, например, для Node.js:
-FROM openjdk:latest
+FROM maven:3.8.4-openjdk-17 AS build
 
-# Установите рабочую директорию в контейнере
+# копирование исходного кода в образ
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+
+# Сборка приложения
+RUN mvn -f /usr/src/app/pom.xml clean package
+
+# Образ JDK для запуска приложения
+FROM openjdk:17
+
+# Установка рабочей директории в контейнере
 WORKDIR /telegramBot
 
-# Скопируйте исходный код проекта в контейнер
-COPY ./target/telegramBot-0.0.1-SNAPSHOT.jar /telegramBot/
+# Копирование собранного jar-файл из стадии сборки
+COPY --from=build /usr/src/app/target/telegramBot-0.0.1-SNAPSHOT.jar /telegramBot/
 
-# Определите порт, который будет прослушивать приложение
+# Порт, который будет прослушивать приложение
 EXPOSE 8080
 
-# Запустите приложение при старте контейнера
+# Запуск приложения при старте контейнера
 CMD ["java", "-jar", "telegramBot-0.0.1-SNAPSHOT.jar"]
