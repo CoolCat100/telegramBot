@@ -50,9 +50,10 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
         String[] parts = messageText.split("\\s+");
         boolean numberFound = false;
         for (String part : parts) {
-            double salary = parseSalary(part);
-            if (salary != -1) {
-                processSalary(update, salary);
+            String salaryStr = parseSalary(part);
+            if (salaryStr != null) {
+                int salary = convertSalaryToInt(salaryStr);
+                processSalary(update, salary, salaryStr);
                 numberFound = true;
                 break;
             }
@@ -64,9 +65,10 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
     }
 
     private void handleDirectMessage(Update update, String messageText) {
-        double salary = parseSalary(messageText);
-        if (salary != -1) {
-            processSalary(update, salary);
+        String salaryStr = parseSalary(messageText);
+        if (salaryStr != null) {
+            int salary = convertSalaryToInt(salaryStr);
+            processSalary(update, salary, salaryStr);
         } else {
             SendMessage message = new SendMessage();
             message.setChatId(String.valueOf(update.getMessage().getChatId()));
@@ -76,14 +78,23 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void processSalary(Update update, double salary) {
+    private void processSalary(Update update, double salary, String originalFormat) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(update.getMessage().getChatId()));
         message.enableMarkdown(true);
 
         double tax = taxService.countTax(salary);
         double finalSalary = salary - tax;
-        message.setText("*Размер зарплаты net:* " + finalSalary);
+        String responseText;
+        if (originalFormat.endsWith("к")) {
+            responseText = "*Размер зарплаты net:* " + (finalSalary / 1000) + "к";
+        } else if (originalFormat.endsWith("k")) {
+            responseText = "*Размер зарплаты net:* " + (finalSalary / 1000) + "k";
+        } else {
+            responseText = "*Размер зарплаты net:* " + finalSalary;
+        }
+
+        message.setText(responseText);
         sendResponse(update, message);
     }
 
@@ -95,16 +106,19 @@ public class TaxTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private double parseSalary(String input) {
-        if (input.matches("\\d+(\\.\\d+)?к?")) {
-            if (input.toLowerCase().endsWith("к")) {
-                input = input.substring(0, input.length() - 1);
-                return Double.parseDouble(input) * 1000;
-            } else {
-                return Double.parseDouble(input);
-            }
+    private String parseSalary(String input) {
+        if (input.matches("\\d+(\\.\\d+)?[кk]?")) {
+            return input;
         } else {
-            return -1;
+            return null;
+        }
+    }
+    private int convertSalaryToInt(String salaryStr) {
+        if (salaryStr.toLowerCase().endsWith("к") || salaryStr.toLowerCase().endsWith("k")) {
+            salaryStr = salaryStr.substring(0, salaryStr.length() - 1);
+            return Integer.parseInt(salaryStr) * 1000;
+        } else {
+            return Integer.parseInt(salaryStr);
         }
     }
 }
